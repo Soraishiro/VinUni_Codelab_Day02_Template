@@ -63,11 +63,11 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 ### 📝 List bài toán của tôi:
 | # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
 |---|----------------------------------|------|---------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| 1 | **VinFast** | AI có thể tốt hơn | Sự cố ADAS trên xe VinFast chưa được thu thập có hệ thống — NHTSA triệu hồi 6.300 VF8 tại Mỹ do LKA kích hoạt bất ngờ khi vào cua (Recall 25V-559, 09/2025). Tại VN, người dùng phản ánh LKA giằng lái do vạch đường mờ, VinFast fix bằng OTA từng lần. Đội xe Xanh SM 100K+ là nguồn data thực địa lớn nhưng chưa được khai thác. |
+| 2 | **Xanh SM** | Pain từ người khác | Hành vi dịch vụ tài xế kém chưa được giám sát chủ động — S2S (dashcam AI, 04/2025) chỉ giám sát an ninh khung giờ 22h-6h. Cảnh báo gian lận 4 cấp (10/2025) phát hiện gian lận cuốc xe. Hành vi dịch vụ (thái độ kém) vẫn phụ thuộc rating 5 sao thụ động từ khách, yêu cầu ≥ 4.85 sao để nhận thưởng. |
+| 3 | **Xanh SM** | Tốn thời gian | Xử lý khiếu nại khách hàng qua tổng đài 1555 (24/7) và App — với ~1 triệu chuyến/ngày. Tính năng giải trình trực tuyến (12/2025) hỗ trợ tài xế giải trình cuốc bị cảnh báo Cao/Rất cao, nhưng phía khách hàng vẫn phản ánh khó kết nối tổng đài giờ cao điểm. |
+| 4 | **Vinhomes** | Tốn thời gian | Phân loại & điều phối phản ánh sự cố kỹ thuật cư dân trên App Vinhomes Resident — Dù đã có Trợ lý ảo "Hey Vinhomes" (VinBigdata, 07/2022) hỗ trợ tra cứu tiện ích/hóa đơn, khâu tiếp nhận phản ánh sự cố kỹ thuật (thấm dột, thang máy, hỏng hóc tiện ích) phục vụ gần 650.000 cư dân tại 32 KĐT (cuối 2025) vẫn xử lý thủ công. Đánh giá trên App Store của cư dân phản ánh tình trạng ticket gửi qua App chỉ nhận phản hồi tự động "đã tiếp nhận", thời gian điều phối kỹ thuật BQL xử lý kéo dài do khâu đọc, phân loại và chuyển tiếp về từng phân khu toà nhà hoàn toàn thủ công. |
+| 5 | **VinFast** | Tốn thời gian | Liên thông dữ liệu cọc xe & tư vấn bán hàng đa kênh chưa có bộ nhớ xuyên phiên — Dù tổng đài 1900 2323 89 (nhánh 1) đã tích hợp VinBase Callbot trả lời FAQ và ViVi hỗ trợ trên xe, khâu bán hàng đa kênh (Web - Hotline - Showroom) vẫn đứt gãy. Khi các đợt cọc xe điện bùng nổ (kỷ lục 27.649 đơn cọc VF 3 trong 66h, 05/2024), khách cọc online gọi tổng đài hỏi tiến độ giao xe/thủ tục vay, tổng đài không có dữ liệu thực tế tại showroom; khi chuyển máy sang tư vấn viên hoặc đại lý không có Handoff Brief, bắt khách lặp lại nhu cầu từ đầu. Chính sách ưu đãi pin/giá thay đổi liên tục theo tháng dẫn đến telesale tra cứu thủ công và rủi ro lệch kịch bản. |
 
 ---
 
@@ -75,26 +75,95 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 
 Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Problem Cards** dưới đây (10 phút/card).
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #___                                     │
+│ QUICK PROBLEM CARD #1                                       │
 │                                                             │
-│ Bài toán (1 câu): ________________________________________  │
-│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
-│                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
+│ Bài toán: Thu thập, chẩn đoán & phân loại tự động sự cố     │
+│ ADAS (LKA, ACC) từ log xe và phản ánh của người lái.        │
+│ Công ty thành viên: [x] VinFast                             │
 │                                                             │
-│ Ai đang đau (Actor)? ______________________________________ │
+│ Ai đang đau? Kỹ sư R&D ADAS (lọc thủ công hàng GB log),     │
+│ Tài xế/Khách hàng (bất an khi LKA giằng lái, vạch mờ).      │
 │                                                             │
-│ Workflow thủ công hiện tại (3-5 bước):                      │
-│   1. ___ ──> 2. ___ ──> 3. ___ ──> 4. ___                   │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Xe gặp sự cố ADAS (LKA kích hoạt bất ngờ/cua gắt)      │
+│   → 2. Kỹ thuật viên xưởng cắm cổng OBD kéo raw log xe      │
+│   → 3. Gửi file log nặng kèm mô tả sơ sài về team R&D       │
+│   → 4. Kỹ sư tua log, đối chiếu video tìm nguyên nhân       │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? ___ (⏱ ___ phút/lượt)      │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? _____________________ │
+│ Bước nào tốn nhất? Bước 3-4 (⏱ 2-3 ngày/ca, sót case ~30%)  │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 3-4              │
+│ (AI Event Extraction: Tự cắt snapshot 30s log sự cố →       │
+│ trích xuất bối cảnh vạch đường/góc cua → auto-tag lỗi)      │
 │                                                             │
-│ Đo thành công bằng gì (Metric có số)? ______________________ │
-│   VD: "Giảm thời gian soạn phản hồi từ 10 min ──> under 2 min"│
+│ Đo thành công bằng gì (Metric có số)?                       │
+│ Giảm thời gian khoanh vùng sự cố từ 3 ngày → dưới 15 phút.  │
+│ Tỉ lệ phân loại đúng nhóm nguyên nhân sự cố đạt ≥ 90%.      │
 │                                                             │
-│ Quick Architecture: [ ] No AI  [ ] Rule  [ ] LLM  [ ] Agent │
+│ Quick Architecture: [x] AI Agent                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #2                                       │
+│                                                             │
+│ Bài toán: Tự động phân loại khiếu nại, trích xuất sự vụ     │
+│ & hỗ trợ giải trình trực tuyến cho tổng đài Xanh SM 1555.   │
+│ Công ty thành viên: [x] Xanh SM                             │
+│                                                             │
+│ Ai đang đau? CSKH Tổng đài 1555 (quá tải ~1 triệu chuyến/ngày) │
+│ Tài xế (bị trừ điểm thưởng/khóa cuốc, chờ duyệt giải trình). │
+│                                                             │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Khách gọi 1555 hoặc gửi khiếu nại qua App              │
+│   → 2. CSKH nghe ghi âm/đọc text, tra cứu cuốc trên CRM     │
+│   → 3. Gửi yêu cầu giải trình cho tài xế qua App Driver     │
+│   → 4. CSKH đọc giải trình (tính năng 12/2025), đối soát    │
+│        lộ trình GPS và ra quyết định xử lý                  │
+│                                                             │
+│ Bước nào tốn nhất? Bước 2 & 4 (⏱ 15-20 phút/vé khiếu nại)   │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2 & 4            │
+│ (ASR/NLP phân tích cuộc gọi → tóm tắt sự vụ đối soát GPS    │
+│ tự động → draft quyết định giải trình cho CSKH duyệt)       │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                       │
+│ Giảm thời gian xử lý khiếu nại từ 20 phút → dưới 3 phút/vé. │
+│ Tỉ lệ phân loại đúng nguyên nhân khiếu nại đạt ≥ 92%.       │
+│                                                             │
+│ Quick Architecture: [x] LLM Feature                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #3                                       │
+│                                                             │
+│ Bài toán: Phân loại & điều hướng tự động phản ánh sự cố kỹ  │
+│ thuật từ App Vinhomes Resident đến đúng Ban Quản lý tòa nhà. │
+│ Công ty thành viên: [x] Vinhomes                            │
+│                                                             │
+│ Ai đang đau? Ban Quản lý toà nhà (quá tải phân loại thủ     │
+│ công), Cư dân (chờ xử lý lâu, nhận phản hồi rập khuôn).     │
+│                                                             │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Cư dân gửi phản ánh sự cố kèm ảnh qua App Resident     │
+│   → 2. CSKH BQL đọc mô tả, phân loại thủ công chuyên môn    │
+│        (kỹ thuật điện nước / thang máy / vệ sinh)           │
+│   → 3. Chuyển vé đến đúng tổ kỹ thuật trực ban toà nhà      │
+│   → 4. Soạn phản hồi cập nhật trạng thái gửi lại cư dân     │
+│                                                             │
+│ Bước nào tốn nhất? Bước 2-3 (⏱ 10-12 phút/vé, sai toà ~15%) │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-3              │
+│ (NLP phân loại mô tả sự cố & mức độ khẩn cấp → tự động      │
+│ gán vé cho kỹ thuật viên phù hợp → draft phản hồi tiến độ)  │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                       │
+│ Giảm thời gian phân loại & điều phối từ 10 phút → dưới 1p.  │
+│ Tỉ lệ điều hướng đúng tổ kỹ thuật toà nhà đạt ≥ 95%.        │
+│                                                             │
+│ Quick Architecture: [x] LLM Feature                         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
