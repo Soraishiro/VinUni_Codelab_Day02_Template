@@ -1,4 +1,5 @@
 # 03 — AI Log & Reflection
+
 ## Lab 02: AI Product Scoping — Vin Smart Future
 
 Trong bài lab này, tôi sử dụng AI chủ yếu như một trợ lý để mở rộng góc nhìn, kiểm tra giả định và phản biện lại chính các ý tưởng ban đầu. Tôi không bắt đầu bằng việc chọn một công nghệ AI rồi tìm chỗ để áp dụng. Trước tiên, tôi tìm các vấn đề vận hành có thật, kiểm tra xem vấn đề đó còn tồn tại hay doanh nghiệp đã giải quyết rồi, sau đó mới đánh giá AI có thực sự phù hợp hay không.

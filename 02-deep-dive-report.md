@@ -1,4 +1,5 @@
 # 02 — Deep Dive Report
+
 ## VinFast Service Intelligence — Hỗ trợ phân loại và chuyển xử lý yêu cầu khách hàng
 
 > **Phạm vi của đề xuất:** hỗ trợ Trung tâm Chăm sóc Khách hàng VinFast ở bước đọc hiểu, chuẩn hóa, phân loại và đề xuất nơi xử lý yêu cầu.  
@@ -17,6 +18,7 @@ Nguồn: [VinFast lập kỷ lục bàn giao 175.099 xe ô tô điện tại Vi�
 Bản thân VinFast cũng đang đầu tư mạnh vào việc lắng nghe và chuẩn hóa dịch vụ hậu mãi. Tháng 10/2025, hãng thực hiện khảo sát gần **300.000 khách hàng**, tập trung vào tác phong phục vụ, tốc độ và thời gian sửa chữa, chất lượng sửa chữa và các góp ý về trải nghiệm sử dụng xe. Sang năm 2026, chương trình **“Kiến tạo dịch vụ 5 sao”** tiếp tục thu thập các phản ánh liên quan trực tiếp đến các khâu đặt hẹn, tiếp đón, tiếp nhận xe, tư vấn dịch vụ và bàn giao xe; các phản hồi hợp lệ được bộ phận chuyên trách phân tích để cải tiến dịch vụ.
 
 Nguồn:
+
 - [VinFast khảo sát ý kiến khách hàng — nâng cao chất lượng dịch vụ](https://vinfastauto.com/vn_vi/vinfast-khao-sat-y-kien-khach-hang-nang-cao-chat-luong-dich-vu)
 - [Chương trình Kiến tạo dịch vụ 5 sao cùng VinFast](https://vinfastauto.com/vn_vi/chuong-trinh-kien-tao-dich-vu-5-sao-cung-vinfast)
 - [Giai đoạn 2 chương trình Kiến tạo dịch vụ 5 sao](https://vinfastauto.com/vn_vi/vinfast-tiep-tuc-trien-khai-chuong-trinh-kien-tao-dich-vu-5-sao-dong-nhat-chuan-dich-vu-nang-tam-trai-nghiem-khach-hang)
@@ -53,13 +55,13 @@ Vì vậy, các con số về hiệu quả trong báo cáo dưới đây đượ
 
 # 1. Phát biểu bài toán — 6 trường
 
-| Field | Nội dung |
-|---|---|
-| **1. Actor / Operator** | Nhân viên tuyến đầu của Trung tâm Chăm sóc Khách hàng VinFast, là người tiếp nhận yêu cầu và quyết định xử lý ngay hay chuyển tới phòng ban/đại lý phù hợp. Các đơn vị hậu mãi và đại lý là bên nhận handoff. |
-| **2. Current Workflow** | Khách hàng gửi yêu cầu qua hotline, email, website, VinFast App hoặc thư → CSKH tiếp nhận và kiểm tra thông tin → phân loại → xử lý ngay hoặc chuyển tới phòng ban/đại lý → đơn vị liên quan xử lý → phản hồi/xác nhận kết quả với khách hàng. |
-| **3. Bottleneck** | Điểm cần nghiên cứu là bước biến một nội dung khách hàng không theo mẫu thành một “case” đủ rõ để xử lý: vấn đề gì, thiếu thông tin gì, mức độ ưu tiên ra sao, có rơi vào nhóm cần xử lý đặc biệt hay không, và nên chuyển cho ai. Đây là **bottleneck giả thuyết**, cần xác nhận bằng dữ liệu nội bộ. |
-| **4. Business Impact** | Nếu phân loại hoặc handoff không tốt, hậu quả có thể là chuyển vòng, phải đọc và giải thích lại, tăng thời gian xử lý và gây áp lực lên SLA. Tác động đặc biệt đáng quan tâm trong bối cảnh 175.099 xe được bàn giao trong 2025, mạng lưới 400 xưởng dịch vụ và các cam kết phản hồi hậu mãi. |
-| **5. Success Metric** | Prototype chỉ đạt yêu cầu nếu: đề xuất đúng nơi xử lý **≥95%** trên tập dữ liệu có nhãn; phát hiện case cần ưu tiên/an toàn **≥99% recall**; **100%** case không chắc chắn được đẩy sang người xử lý; đầu ra hợp lệ **100%**; pilot phải giảm **≥30%** thời gian phân loại trung vị mà không làm xấu SLA hoặc tăng tỷ lệ chuyển lại. |
+| Field                       | Nội dung                                                                                                                                                                                                                                                                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1. Actor / Operator**     | Nhân viên tuyến đầu của Trung tâm Chăm sóc Khách hàng VinFast, là người tiếp nhận yêu cầu và quyết định xử lý ngay hay chuyển tới phòng ban/đại lý phù hợp. Các đơn vị hậu mãi và đại lý là bên nhận handoff.                                                                                                                              |
+| **2. Current Workflow**     | Khách hàng gửi yêu cầu qua hotline, email, website, VinFast App hoặc thư → CSKH tiếp nhận và kiểm tra thông tin → phân loại → xử lý ngay hoặc chuyển tới phòng ban/đại lý → đơn vị liên quan xử lý → phản hồi/xác nhận kết quả với khách hàng.                                                                                             |
+| **3. Bottleneck**           | Điểm cần nghiên cứu là bước biến một nội dung khách hàng không theo mẫu thành một “case” đủ rõ để xử lý: vấn đề gì, thiếu thông tin gì, mức độ ưu tiên ra sao, có rơi vào nhóm cần xử lý đặc biệt hay không, và nên chuyển cho ai. Đây là **bottleneck giả thuyết**, cần xác nhận bằng dữ liệu nội bộ.                                     |
+| **4. Business Impact**      | Nếu phân loại hoặc handoff không tốt, hậu quả có thể là chuyển vòng, phải đọc và giải thích lại, tăng thời gian xử lý và gây áp lực lên SLA. Tác động đặc biệt đáng quan tâm trong bối cảnh 175.099 xe được bàn giao trong 2025, mạng lưới 400 xưởng dịch vụ và các cam kết phản hồi hậu mãi.                                              |
+| **5. Success Metric**       | Prototype chỉ đạt yêu cầu nếu: đề xuất đúng nơi xử lý **≥95%** trên tập dữ liệu có nhãn; phát hiện case cần ưu tiên/an toàn **≥99% recall**; **100%** case không chắc chắn được đẩy sang người xử lý; đầu ra hợp lệ **100%**; pilot phải giảm **≥30%** thời gian phân loại trung vị mà không làm xấu SLA hoặc tăng tỷ lệ chuyển lại.       |
 | **6. Operational Boundary** | AI chỉ được tóm tắt, trích xuất thông tin, phân loại, phát hiện thiếu dữ liệu, gợi ý mức ưu tiên và nơi xử lý. AI không được tự gửi phản hồi cuối cùng cho khách, tự chẩn đoán xe, quyết định bảo hành/bồi thường, tự xác định tư cách pháp lý của khách, tự đóng case hoặc tự thay đổi/chuyển case trên hệ thống nếu chưa có người duyệt. |
 
 ---
@@ -133,6 +135,7 @@ Future-State có ba actor rõ ràng:
 Một benchmark bên ngoài cho thấy mô hình này có thể tạo ra giá trị đáng kể khi dữ liệu và workflow đủ trưởng thành. ServiceNow công bố case C Spire, nơi hơn 70% email case được agentic AI xử lý qua triage/routing, thời gian triage giảm 44% và khoảng 280 giờ lao động mỗi tháng được giải phóng. Một case khác tại Rossmann báo cáo 89% ticket được tự động phân loại/ưu tiên, routing accuracy 98% và chi phí lao động trên các case do AI xử lý giảm 50%. Đây là **benchmark tham khảo từ vendor case study, không phải dự báo cho VinFast**, nhưng nó chứng minh rằng “exception-based human review” là một mô hình vận hành có thật chứ không chỉ là demo AI.
 
 Nguồn tham khảo benchmark:
+
 - https://www.servicenow.com/au/customers/cspire.html
 - https://www.servicenow.com/customers/rossmann.html
 
@@ -436,18 +439,18 @@ Từ “Agentic” ở đây không có nghĩa là trao toàn quyền cho AI. N�
 
 ## 8.1. AI-Fit Matrix
 
-| Thành phần nghiệp vụ | Rule / State Machine | LLM Feature | Constrained Agentic Loop | Quyết định |
-|---|---:|---:|---:|---|
-| Kiểm tra trường bắt buộc | **Rất phù hợp** | Không cần | Có thể gọi rule | **Rule** |
-| Kiểm tra SLA / escalation policy | **Rất phù hợp** | Không nên tự suy diễn | Agent phải tuân theo | **Rule** |
-| Hiểu nội dung tự do | Yếu | **Rất phù hợp** | **Rất phù hợp** | **LLM trong Agent** |
-| Tách nhiều intent | Khó mở rộng | **Rất phù hợp** | **Rất phù hợp** | **LLM trong Agent** |
-| Tìm dữ liệu còn thiếu | Có thể rule một phần | **Phù hợp** | **Rất phù hợp** vì có thể hỏi lại | **Agent** |
-| Hỏi khách bổ sung thông tin | Cứng nếu chỉ template | Soạn được | **Phù hợp nhất** vì có feedback loop | **Agent có template/rule** |
-| Tra cứu knowledge / policy / customer context | Rule không đủ | Có thể đọc context | **Phù hợp** qua tool calls | **Agent** |
-| Tạo case và route low-risk | Rule định tuyến tốt | Chỉ đề xuất | **Phù hợp** nếu có allow-list | **Agent + Rule gate** |
-| Case nhạy cảm | Rule phát hiện cờ | LLM hỗ trợ nhận diện | Agent phải dừng | **Human** |
-| Quyết định bảo hành/bồi thường | Không | Không | Không | **Human / chuyên gia** |
+| Thành phần nghiệp vụ                          |  Rule / State Machine |           LLM Feature |             Constrained Agentic Loop | Quyết định                 |
+| --------------------------------------------- | --------------------: | --------------------: | -----------------------------------: | -------------------------- |
+| Kiểm tra trường bắt buộc                      |       **Rất phù hợp** |             Không cần |                      Có thể gọi rule | **Rule**                   |
+| Kiểm tra SLA / escalation policy              |       **Rất phù hợp** | Không nên tự suy diễn |                 Agent phải tuân theo | **Rule**                   |
+| Hiểu nội dung tự do                           |                   Yếu |       **Rất phù hợp** |                      **Rất phù hợp** | **LLM trong Agent**        |
+| Tách nhiều intent                             |           Khó mở rộng |       **Rất phù hợp** |                      **Rất phù hợp** | **LLM trong Agent**        |
+| Tìm dữ liệu còn thiếu                         |  Có thể rule một phần |           **Phù hợp** |    **Rất phù hợp** vì có thể hỏi lại | **Agent**                  |
+| Hỏi khách bổ sung thông tin                   | Cứng nếu chỉ template |             Soạn được | **Phù hợp nhất** vì có feedback loop | **Agent có template/rule** |
+| Tra cứu knowledge / policy / customer context |         Rule không đủ |    Có thể đọc context |           **Phù hợp** qua tool calls | **Agent**                  |
+| Tạo case và route low-risk                    |   Rule định tuyến tốt |           Chỉ đề xuất |        **Phù hợp** nếu có allow-list | **Agent + Rule gate**      |
+| Case nhạy cảm                                 |     Rule phát hiện cờ |  LLM hỗ trợ nhận diện |                      Agent phải dừng | **Human**                  |
+| Quyết định bảo hành/bồi thường                |                 Không |                 Không |                                Không | **Human / chuyên gia**     |
 
 ## 8.2. Vì sao không dừng ở LLM Feature?
 
@@ -590,6 +593,7 @@ Trong proposal này:
 Salesforce đã hỗ trợ mô hình case classification/routing theo confidence threshold: khi dự đoán vượt ngưỡng, hệ thống có thể tự cập nhật field rồi chạy assignment/routing rules; khi không đủ điều kiện có thể chuyển sang service rep. Điều này cho thấy pattern “confidence-gated automation + escalation” là một pattern vận hành phổ biến, không phải ý tưởng lý thuyết.
 
 Nguồn:
+
 - https://help.salesforce.com/s/articleView?id=service.cc_service_rules.htm
 - https://help.salesforce.com/s/articleView?id=ai.service_agent_email_routing.htm
 
@@ -684,14 +688,14 @@ Nếu thời gian giảm nhưng tỷ lệ chuyển lại tăng, pilot thất b�
 
 ## AI Readiness Checklist
 
-| Câu hỏi | Trạng thái hiện tại | Nhận định |
-|---|---|---|
-| Có dữ liệu mẫu/log sạch để test? | **Chưa xác minh** | Cần dữ liệu nội bộ đã ẩn thông tin cá nhân. Đây là điều kiện tiên quyết để đánh giá nghiêm túc. |
-| Rủi ro khi AI sai có thể kiểm soát bằng HITL/Fallback? | **Có** | Scope chỉ là decision support; không cho model tự thực hiện action. |
-| Stakeholder có sẵn sàng thay đổi quy trình? | **Chưa xác minh** | Cần làm việc với CSKH, chủ quy trình CRM, hậu mãi, Legal/Compliance. |
-| Workflow có thật và có giá trị nghiệp vụ? | **Có** | Bước phân loại và chuyển xử lý được VinFast công khai trong quy trình chính thức. |
-| LLM có lý do tồn tại? | **Có điều kiện** | Có giá trị ở nội dung ngôn ngữ tự do và multi-intent; cần benchmark với Rule-only. |
-| Có cần Agent tự hành? | **Không** | Autonomy không giải quyết thêm phần khó chính nhưng làm tăng rủi ro. |
+| Câu hỏi                                                | Trạng thái hiện tại | Nhận định                                                                                       |
+| ------------------------------------------------------ | ------------------- | ----------------------------------------------------------------------------------------------- |
+| Có dữ liệu mẫu/log sạch để test?                       | **Chưa xác minh**   | Cần dữ liệu nội bộ đã ẩn thông tin cá nhân. Đây là điều kiện tiên quyết để đánh giá nghiêm túc. |
+| Rủi ro khi AI sai có thể kiểm soát bằng HITL/Fallback? | **Có**              | Scope chỉ là decision support; không cho model tự thực hiện action.                             |
+| Stakeholder có sẵn sàng thay đổi quy trình?            | **Chưa xác minh**   | Cần làm việc với CSKH, chủ quy trình CRM, hậu mãi, Legal/Compliance.                            |
+| Workflow có thật và có giá trị nghiệp vụ?              | **Có**              | Bước phân loại và chuyển xử lý được VinFast công khai trong quy trình chính thức.               |
+| LLM có lý do tồn tại?                                  | **Có điều kiện**    | Có giá trị ở nội dung ngôn ngữ tự do và multi-intent; cần benchmark với Rule-only.              |
+| Có cần Agent tự hành?                                  | **Không**           | Autonomy không giải quyết thêm phần khó chính nhưng làm tăng rủi ro.                            |
 
 ---
 
