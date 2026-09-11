@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 — Current-State Workflow | VinFast Customer Request Triage</title>
+<style>
+:root{
+  --ink:#162033;
+  --muted:#667085;
+  --line:#d8e0e9;
+  --soft:#f6f8fb;
+  --navy:#17395f;
+  --blue:#eaf2ff;
+  --blue-line:#9ebbe7;
+  --amber:#fff7df;
+  --amber-line:#e7c76c;
+  --red:#fff1f1;
+  --red-line:#e58f8f;
+  --green:#edf8f2;
+  --green-line:#9fd3b3;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:#eef2f6;
+  color:var(--ink);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  padding:24px;
+}
+.sheet{
+  max-width:1450px;
+  margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:34px;
+  box-shadow:0 18px 50px rgba(23,57,95,.08);
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+}
+.kicker{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#48637f;
+  margin-bottom:8px;
+}
+h1{
+  margin:0;
+  font-size:clamp(30px,4vw,52px);
+  letter-spacing:-.035em;
+  line-height:1.02;
+  color:var(--navy);
+}
+.subtitle{
+  margin-top:12px;
+  max-width:980px;
+  font-size:18px;
+  line-height:1.55;
+  color:#344054;
+}
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+button{
+  appearance:none;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  padding:10px 13px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+button:hover{background:#f8fafc}
+.factbar{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.fact{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 14px;
+  background:#fff;
+}
+.fact .label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  font-weight:800;
+}
+.fact .value{
+  margin-top:4px;
+  font-weight:800;
+  line-height:1.35;
+}
+.section{
+  margin-top:34px;
+}
+.section-head{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:14px;
+}
+.section-no{
+  width:34px;height:34px;border-radius:10px;
+  display:grid;place-items:center;
+  background:var(--navy);color:#fff;
+  font-weight:850;flex:0 0 auto;
+}
+h2{
+  margin:0;
+  font-size:25px;
+  letter-spacing:-.02em;
+  line-height:1.15;
+}
+.section-head p{
+  margin:5px 0 0;
+  color:var(--muted);
+  line-height:1.5;
+}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin:10px 0 16px;
+}
+.legend-item{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 10px;
+  color:#475467;
+  font-size:12px;
+  background:#fff;
+}
+.swatch{width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.07)}
+.workflow-wrap{
+  overflow-x:auto;
+  padding-bottom:6px;
+}
+.workflow{
+  min-width:1240px;
+  display:grid;
+  grid-template-columns: 1fr 82px 1fr 82px 1.15fr 82px 1fr 82px 1fr;
+  gap:10px;
+  align-items:stretch;
+}
+.step{
+  position:relative;
+  min-height:320px;
+  border:1.5px solid var(--line);
+  border-radius:20px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+}
+.step.blue{background:var(--blue);border-color:var(--blue-line)}
+.step.red{background:var(--red);border-color:var(--red-line);box-shadow:0 0 0 2px rgba(229,143,143,.15) inset}
+.step.amber{background:var(--amber);border-color:var(--amber-line)}
+.step.green{background:var(--green);border-color:var(--green-line)}
+.step .idx{
+  width:34px;height:34px;border-radius:10px;background:var(--navy);color:#fff;
+  display:grid;place-items:center;font-weight:850;font-size:14px;
+}
+.step .owner{
+  margin-top:14px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#667085;
+  font-weight:800;
+}
+.step .title{
+  margin-top:5px;
+  font-size:21px;
+  font-weight:850;
+  line-height:1.15;
+}
+.step .desc{
+  margin-top:10px;
+  color:#344054;
+  font-size:14px;
+  line-height:1.52;
+}
+.output{
+  margin-top:12px;
+  padding:10px 11px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(149,161,179,.25);
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.45;
+}
+.output strong{display:block;margin-bottom:3px}
+.timing{
+  margin-top:auto;
+  padding-top:12px;
+  border-top:1px dashed rgba(102,112,133,.35);
+  font-size:12.5px;
+  line-height:1.45;
+  color:#475467;
+}
+.bottleneck{
+  position:absolute;
+  right:12px;top:12px;
+  padding:6px 8px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--red-line);
+  color:#b42318;
+  font-weight:850;
+  font-size:11px;
+}
+.arrow{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+}
+.arrow .line{
+  font-size:30px;
+  color:#98a2b3;
+}
+.handoff{
+  width:100%;
+  text-align:center;
+  font-size:11.5px;
+  line-height:1.35;
+  color:#8a5a00;
+  font-weight:800;
+  padding:8px 7px;
+  background:#fffaeb;
+  border:1px solid #fedf89;
+  border-radius:12px;
+}
+.analysis-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:14px;
+}
+.card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  background:#fff;
+}
+.card.red{background:var(--red);border-color:var(--red-line)}
+.card h3{
+  margin:0 0 10px;
+  font-size:18px;
+  line-height:1.25;
+}
+.card p{
+  margin:0;
+  color:#344054;
+  line-height:1.55;
+}
+ul{
+  margin:8px 0 0;
+  padding-left:18px;
+  color:#344054;
+  line-height:1.55;
+}
+li{margin:6px 0}
+.chain{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+.chain .box{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  background:#fff;
+  text-align:center;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:700;
+}
+.chain .box strong{display:block;color:#b42318;margin-bottom:4px}
+.evidence{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.evidence th,.evidence td{
+  padding:11px 12px;
+  border-bottom:1px solid #e8edf2;
+  text-align:left;
+  vertical-align:top;
+  line-height:1.45;
+}
+.evidence th{
+  color:#667085;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.tag{
+  display:inline-block;
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:11px;
+  font-weight:850;
+}
+.tag.known{background:#eaf7ef;color:#1e6b3d}
+.tag.hyp{background:#fff6df;color:#7a5a08}
+.tag.unknown{background:#f2f4f7;color:#475467}
+.message{
+  border-left:4px solid #7ea1c4;
+  background:#f8fafc;
+  border-radius:0 14px 14px 0;
+  padding:14px 16px;
+  line-height:1.55;
+  color:#344054;
+  margin-top:14px;
+}
+.sources{
+  margin-top:24px;
+  border-top:1px solid var(--line);
+  padding-top:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.source{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:12.5px;
+  color:#475467;
+  line-height:1.5;
+}
+.source a{color:#315b8a}
+.note{
+  margin-top:10px;
+  font-size:12px;
+  color:#667085;
+  line-height:1.5;
+}
+@media(max-width:900px){
+  body{padding:0;background:#fff}
+  .sheet{border:0;border-radius:0;box-shadow:none;padding:18px}
+  .topbar{display:block}
+  .actions{margin-top:14px}
+  .factbar{grid-template-columns:1fr 1fr}
+  .analysis-grid{grid-template-columns:1fr}
+  .chain{grid-template-columns:1fr 1fr}
+  .sources{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .factbar,.chain{grid-template-columns:1fr}
+  .subtitle{font-size:16px}
+}
+@media print{
+  @page{size:A3 landscape;margin:12mm}
+  body{background:#fff;padding:0}
+  .sheet{max-width:none;border:0;box-shadow:none;border-radius:0;padding:0}
+  .actions{display:none}
+  .workflow-wrap{overflow:visible}
+  .workflow{min-width:0}
+  .section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="topbar">
+    <div>
+      <div class="kicker">04 — Current-State Workflow Diagram</div>
+      <h1>VinFast Customer Request Triage</h1>
+      <p class="subtitle">
+        Quy trình hiện tại từ lúc khách hàng gửi yêu cầu đến khi yêu cầu được chuyển đúng đơn vị xử lý.
+        Sơ đồ tập trung vào <strong>điểm ra quyết định “phân loại và chuyển xử lý”</strong> — nơi có tiềm năng tạo ra phần lớn giá trị nếu được cải thiện.
+      </p>
+    </div>
+    <div class="actions">
+      <button type="button" onclick="window.print()">In / Lưu PDF</button>
+    </div>
+  </div>
+
+  <div class="factbar">
+    <div class="fact">
+      <div class="label">Actor chính hiện tại</div>
+      <div class="value">Trung tâm Chăm sóc Khách hàng VinFast</div>
+    </div>
+    <div class="fact">
+      <div class="label">Điểm nghẽn giả thuyết</div>
+      <div class="value">Hiểu yêu cầu → phân loại → chọn đúng nơi xử lý</div>
+    </div>
+    <div class="fact">
+      <div class="label">Handoff quan trọng</div>
+      <div class="value">Khách → CSKH → Phòng ban/Đại lý → Khách</div>
+    </div>
+    <div class="fact">
+      <div class="label">Mốc thời gian có nguồn</div>
+      <div class="value">Tiếp nhận ≤ 01 ngày làm việc · Một số phản ánh sửa chữa: giải pháp ≤ T+1</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-no">1</div>
+      <div>
+        <h2>Quy trình vận hành hiện tại</h2>
+        <p>Chỉ thể hiện những bước có căn cứ công khai. Thời gian nội bộ của từng bước chưa được VinFast công bố được đánh dấu rõ là “cần đo nội bộ”.</p>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><i class="swatch" style="background:var(--blue)"></i>Tiếp nhận / xử lý tuyến đầu</span>
+      <span class="legend-item"><i class="swatch" style="background:var(--amber)"></i>Handoff sang đơn vị chuyên môn</span>
+      <span class="legend-item"><i class="swatch" style="background:var(--red)"></i>🔴 Bottleneck giả thuyết</span>
+      <span class="legend-item"><i class="swatch" style="background:var(--green)"></i>Phản hồi / đóng vòng xử lý</span>
+    </div>
+
+    <div class="workflow-wrap">
+      <div class="workflow">
+        <div class="step blue">
+          <div class="idx">1</div>
+          <div class="owner">Actor: Khách hàng</div>
+          <div class="title">Gửi yêu cầu</div>
+          <div class="desc">
+            Phản ánh, yêu cầu hoặc khiếu nại được gửi qua hotline, email, website, ứng dụng VinFast hoặc thư.
+          </div>
+          <div class="output">
+            <strong>Đầu ra của bước</strong>
+            Nội dung yêu cầu ban đầu + tài liệu khách cung cấp (nếu có).
+          </div>
+          <div class="timing">
+            ⏱ Không có số phút công khai cho bước này.
+          </div>
+        </div>
+
+        <div class="arrow">
+          <div class="line">→</div>
+          <div class="handoff">🔄 Handoff 1<br>Khách hàng → CSKH</div>
+        </div>
+
+        <div class="step blue">
+          <div class="idx">2</div>
+          <div class="owner">Actor: Trung tâm CSKH</div>
+          <div class="title">Tiếp nhận & kiểm tra ban đầu</div>
+          <div class="desc">
+            CSKH ghi nhận yêu cầu, kiểm tra nội dung khách đã cung cấp và yêu cầu bổ sung tài liệu/thông tin nếu cần.
+          </div>
+          <div class="output">
+            <strong>Đầu ra của bước</strong>
+            Một case đã được tiếp nhận và có đủ thông tin ban đầu để bắt đầu xử lý.
+          </div>
+          <div class="timing">
+            ⏱ VinFast công khai: thông báo đã tiếp nhận trong vòng <strong>01 ngày làm việc</strong>.
+          </div>
+        </div>
+
+        <div class="arrow">
+          <div class="line">→</div>
+          <div class="handoff">Nghiệp vụ nội bộ<br>CSKH xử lý</div>
+        </div>
+
+        <div class="step red">
+          <span class="bottleneck">🔴 BOTTLENECK</span>
+          <div class="idx">3</div>
+          <div class="owner">Actor: Trung tâm CSKH</div>
+          <div class="title">Phân loại & chọn hướng xử lý</div>
+          <div class="desc">
+            CSKH phải hiểu khách đang gặp vấn đề gì, case có một hay nhiều ý định, còn thiếu thông tin gì,
+            có dấu hiệu cần ưu tiên hay không và yêu cầu nên được xử lý tại tuyến đầu hay chuyển sang đơn vị khác.
+          </div>
+          <div class="output">
+            <strong>Đầu ra của bước</strong>
+            Quyết định: xử lý ngay tại CSKH hoặc chuyển tới phòng ban/đại lý phù hợp.
+          </div>
+          <div class="timing">
+            ⏱ <strong>Chưa có baseline công khai.</strong><br>
+            Đây là điểm cần đo bằng log nội bộ trước khi kết luận hiệu quả.
+          </div>
+        </div>
+
+        <div class="arrow">
+          <div class="line">→</div>
+          <div class="handoff">🔄 Handoff 2<br>CSKH → Phòng ban / Đại lý</div>
+        </div>
+
+        <div class="step amber">
+          <div class="idx">4</div>
+          <div class="owner">Actor: Phòng ban / Đại lý / Xưởng dịch vụ</div>
+          <div class="title">Xử lý chuyên môn</div>
+          <div class="desc">
+            Đơn vị nhận case xử lý phần việc thuộc thẩm quyền: hậu mãi, kỹ thuật, dịch vụ hoặc nội dung chuyên môn liên quan.
+          </div>
+          <div class="output">
+            <strong>Đầu ra của bước</strong>
+            Phương án xử lý hoặc kết quả chuyên môn để phản hồi khách hàng.
+          </div>
+          <div class="timing">
+            ⏱ Với phản ánh/khiếu nại dịch vụ sửa chữa, VinFast nêu mục tiêu phản hồi về giải pháp muộn nhất trong ngày <strong>T+1</strong>.
+          </div>
+        </div>
+
+        <div class="arrow">
+          <div class="line">→</div>
+          <div class="handoff">🔄 Handoff 3<br>Đơn vị xử lý → CSKH / Khách</div>
+        </div>
+
+        <div class="step green">
+          <div class="idx">5</div>
+          <div class="owner">Actor: CSKH + Đơn vị liên quan</div>
+          <div class="title">Phản hồi & xác nhận kết quả</div>
+          <div class="desc">
+            CSKH hoặc đơn vị liên quan phản hồi kết quả, xác nhận phương án xử lý và đóng vòng trao đổi với khách hàng.
+          </div>
+          <div class="output">
+            <strong>Đầu ra của bước</strong>
+            Khách nhận được phản hồi và case đi tới trạng thái hoàn tất hoặc tiếp tục xử lý nếu chưa đạt.
+          </div>
+          <div class="timing">
+            ⏱ Không có một mốc duy nhất cho mọi loại case; phụ thuộc loại yêu cầu và quy trình chuyên môn.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-no">2</div>
+      <div>
+        <h2>Vì sao bước phân loại là điểm đáng đầu tư nghiên cứu?</h2>
+        <p>Không phải vì “AI đọc văn bản tốt”, mà vì đây là nơi chất lượng quyết định ảnh hưởng trực tiếp tới các bước phía sau.</p>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="card red">
+        <h3>Một case thực tế có thể không hề “một nhãn = một nơi xử lý”</h3>
+        <p>
+          Một yêu cầu có thể đồng thời chứa lỗi kỹ thuật, bức xúc về trải nghiệm dịch vụ, câu hỏi bảo hành và vấn đề đặt lịch.
+          Nếu bước phân loại chỉ chọn một nhãn đơn giản, thông tin dễ bị mất. Nếu case được chuyển khi còn thiếu VIN, địa điểm,
+          lịch sử sửa chữa hoặc bằng chứng liên quan, đơn vị phía sau phải hỏi lại hoặc chuyển ngược.
+        </p>
+        <div class="chain">
+          <div class="box"><strong>1</strong>Hiểu sai / thiếu ý định</div>
+          <div class="box"><strong>2</strong>Chuyển sai hoặc thiếu dữ liệu</div>
+          <div class="box"><strong>3</strong>Đọc lại / hỏi lại / chuyển lại</div>
+          <div class="box"><strong>4</strong>Tăng thời gian xử lý & áp lực SLA</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Điểm cần xác minh bằng dữ liệu nội bộ</h3>
+        <ul>
+          <li>Thời gian trung vị từ lúc tiếp nhận đến lúc case được route.</li>
+          <li>Tỷ lệ case phải chuyển lại sang đơn vị khác.</li>
+          <li>Tỷ lệ case thiếu thông tin khi tới đơn vị xử lý.</li>
+          <li>Tỷ lệ case có nhiều ý định hoặc ngoài taxonomy hiện tại.</li>
+          <li>Tỷ lệ chạm/vượt SLA do thời gian nằm ở bước triage.</li>
+        </ul>
+        <div class="message">
+          <strong>Thông điệp cho stakeholder:</strong><br>
+          Trước khi bán giải pháp AI, cần chứng minh rằng chi phí và độ trễ đáng kể thực sự nằm ở bước triage/handoff.
+          Nếu bottleneck nằm ở quy trình trách nhiệm hoặc taxonomy chưa rõ, phải sửa nghiệp vụ trước khi thêm AI.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-no">3</div>
+      <div>
+        <h2>Evidence vs. giả thuyết</h2>
+        <p>Phân biệt rõ phần nào được nguồn công khai xác nhận và phần nào phải đo trước khi đưa vào business case.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <table class="evidence">
+        <thead>
+          <tr>
+            <th>Nội dung</th>
+            <th>Trạng thái</th>
+            <th>Ý nghĩa với sơ đồ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>VinFast tiếp nhận phản ánh/yêu cầu/khiếu nại qua nhiều kênh và có bước phân loại, xử lý ngay hoặc chuyển phòng ban/đại lý.</td>
+            <td><span class="tag known">ĐÃ XÁC NHẬN</span></td>
+            <td>Là nền tảng của 5 bước trong workflow.</td>
+          </tr>
+          <tr>
+            <td>Thông báo tiếp nhận trong 01 ngày làm việc.</td>
+            <td><span class="tag known">ĐÃ XÁC NHẬN</span></td>
+            <td>Mốc thời gian công khai của bước tiếp nhận.</td>
+          </tr>
+          <tr>
+            <td>Một số phản ánh/khiếu nại dịch vụ sửa chữa được phản hồi về giải pháp muộn nhất T+1.</td>
+            <td><span class="tag known">ĐÃ XÁC NHẬN</span></td>
+            <td>Cho thấy handoff/triage có quan hệ trực tiếp với SLA phía sau.</td>
+          </tr>
+          <tr>
+            <td>Bước phân loại đang tốn nhiều thời gian hoặc có tỷ lệ chuyển sai đáng kể.</td>
+            <td><span class="tag hyp">GIẢ THUYẾT</span></td>
+            <td>Phải đo bằng dữ liệu nội bộ trước khi tính ROI.</td>
+          </tr>
+          <tr>
+            <td>Thời gian trung bình của từng bước và volume case mỗi ngày.</td>
+            <td><span class="tag unknown">CHƯA BIẾT</span></td>
+            <td>Không được tự điền số giả vào sơ đồ.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-no">4</div>
+      <div>
+        <h2>Điểm nối sang Future-State</h2>
+        <p>File này chỉ mô tả hiện trạng; giải pháp tương lai phải đánh đúng vào công việc chuẩn bị và điều phối, không chỉ “soạn câu trả lời hay hơn”.</p>
+      </div>
+    </div>
+
+    <div class="message">
+      <strong>Giả thuyết giá trị để mang sang Phase 3.3:</strong><br>
+      nếu phần lớn case low-risk có thể được hệ thống tự chuẩn hóa, hỏi bổ sung thông tin, phân loại và route đúng mà không cần con người chạm vào bước triage,
+      thì human effort có thể chuyển từ <em>“đọc và điều phối”</em> sang <em>“giải quyết case khó và phục hồi trải nghiệm khách hàng”</em>.
+      Đây mới là phần có khả năng tạo ROI đủ lớn để doanh nghiệp cân nhắc đầu tư.
+    </div>
+  </section>
+
+  <div class="sources">
+    <div class="source">
+      <strong>Nguồn 1 — Quy trình CSKH VinFast</strong><br>
+      Quy trình tiếp nhận, phản hồi thông tin và giải quyết phản ánh, yêu cầu, khiếu nại của khách hàng.<br>
+      <a href="https://vinfastauto.com/vn_vi/quy-trinh-tiep-nhan-phan-hoi-thong-tin-va-giai-quyet-phan-anh-yeu-cau-khieu-nai-cua-khach-hang">
+        vinfastauto.com/.../quy-trinh-tiep-nhan...
+      </a>
+    </div>
+    <div class="source">
+      <strong>Nguồn 2 — Quy trình dịch vụ sửa chữa VinFast</strong><br>
+      Dùng để neo mốc phản hồi về giải pháp T+1 cho phản ánh/khiếu nại dịch vụ sửa chữa.<br>
+      <a href="https://vinfastauto.com/vn_vi/dich-vu-sua-chua">
+        vinfastauto.com/vn_vi/dich-vu-sua-chua
+      </a>
+    </div>
+  </div>
+
+  <div class="note">
+    Ghi chú: sơ đồ này không khẳng định VinFast hiện phân loại hoàn toàn thủ công hoặc đang có tỷ lệ misroute cao.
+    Bottleneck ở bước 3 là giả thuyết nghiên cứu được xây từ cấu trúc workflow và phải được kiểm chứng bằng dữ liệu nội bộ.
+  </div>
+</div>
+</body>
+</html>
