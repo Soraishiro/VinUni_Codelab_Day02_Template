@@ -1,291 +1,294 @@
 # 01 — Problem Scan
 ## Lab 02: AI Product Scoping — Vin Smart Future
 
-> **Mục tiêu:** Thực hiện Phase 1 (SCAN) và Phase 2 (QUICK-ASSESS) theo worksheet.  
-> **Nguyên tắc:** Problem First, AI Second. Không giả định một workflow là thủ công nếu nguồn công khai không chứng minh điều đó; không tự bịa baseline thời gian, volume ticket hoặc tỷ lệ lỗi.
+## Mục tiêu
+
+Phần này thực hiện **Phase 1 — SCAN** và **Phase 2 — QUICK-ASSESS** của bài lab.
+
+Tôi không bắt đầu bằng việc chọn một công nghệ AI rồi tìm chỗ để áp dụng. Trước tiên, tôi tìm các vấn đề vận hành có thật, kiểm tra xem vấn đề đó còn tồn tại hay đã được doanh nghiệp giải quyết, sau đó mới đánh giá AI có phù hợp hay không.
 
 ---
 
-## 0. Lọc ảo — Reality Check trước khi SCAN
+# 0. Lọc ảo — kiểm tra ý tưởng trước khi đưa vào SCAN
 
-Inspiration Kit chỉ là nguồn gợi ý. Trước khi đưa một ý tưởng vào SCAN, nhóm kiểm tra xem problem có thật, solution tương tự đã tồn tại chưa, và phần nào chỉ là giả định cần xác minh.
+File `03-inspiration-kit.md` cung cấp nhiều ý tưởng để bắt đầu. Tuy nhiên, đây chỉ là **gợi ý**, không phải bằng chứng rằng doanh nghiệp hiện vẫn gặp đúng vấn đề được mô tả.
 
-### 0.1. Ba ý tưởng loại bỏ ngay
+Vì vậy, trước Phase 1 tôi thực hiện một bước “Lọc ảo”:
 
-| Ý tưởng ban đầu | Reality Check | Quyết định |
-|---|---|---|
-| **Vinmec — AI tóm tắt hồ sơ bệnh án** | Vinmec đã tích hợp DrAid vào quản lý hồ sơ bệnh án. Vinmec công bố thời gian tóm tắt giảm từ khoảng 5 phút xuống 1 phút, tiết kiệm đến 80%. | **Loại** — solution tương tự đã được triển khai. |
-| **Vinhomes — Trợ lý cư dân ảo** | Vinhomes đã ra mắt Trợ lý ảo trên Vinhomes Resident và Vinhomes Online từ 2022, hỗ trợ tra cứu thông tin, hóa đơn, tiện ích và thủ tục. | **Loại** — product đã tồn tại. |
-| **Vinhomes — Tự động route phản ánh cư dân** | Báo cáo thường niên Vinhomes cho biết VPMS đã được triển khai trên các khu đô thị, tự động giao việc, theo dõi tiến độ và tích hợp Resident App/Salesforce/CSM để xử lý phản ánh theo quy trình. | **Loại ở dạng gốc** — không nên đề xuất lại một automation đã tồn tại. |
+1. Lấy từng ý tưởng trong Inspiration Kit làm giả thuyết ban đầu.
+2. Tìm nguồn công khai đáng tin cậy của chính doanh nghiệp: quy trình vận hành, báo cáo thường niên, trang sản phẩm, tin tuyển dụng hoặc FAQ chính thức.
+3. Kiểm tra xem:
+   - quy trình đó có thực sự tồn tại không;
+   - doanh nghiệp đã có sản phẩm hoặc hệ thống giải quyết vấn đề đó chưa;
+   - phần nào là thông tin đã được xác nhận, phần nào chỉ là suy luận.
+4. Chỉ giữ lại các vấn đề còn hợp lý để phân tích tiếp.
 
-**Kết luận Lọc ảo:** SCAN chỉ giữ các problem có workflow công khai đủ rõ hoặc có evidence trực tiếp từ mô tả công việc/quy trình chính thức. Với những phần chưa có số liệu nội bộ, nhóm đánh dấu là **baseline cần đo**, thay vì biến ước lượng thành fact.
+Một số ý tưởng bị loại ngay sau bước này. Ví dụ, Vinmec đã đưa DrAid vào xử lý hồ sơ bệnh án và công bố thời gian tóm tắt hồ sơ giảm từ khoảng 5 phút xuống 1 phút. Vinhomes cũng đã có Trợ lý ảo trên Vinhomes Resident, đồng thời V-PMS đã tự động giao việc và theo dõi xử lý phản ánh khách hàng. Vì vậy, nếu tiếp tục đề xuất “AI tóm tắt hồ sơ Vinmec” hoặc “xây trợ lý cư dân Vinhomes” như một bài toán mới thì không còn thuyết phục.
+
+Bước Lọc ảo giúp tránh một lỗi khá phổ biến: **giải một bài toán nghe hợp lý nhưng thực tế doanh nghiệp đã giải rồi**.
 
 ---
 
 # Phase 1 — SCAN
 
-Worksheet yêu cầu tối thiểu 5 problems. Dù rubric ghi “3 lenses”, worksheet định nghĩa 4 lenses; bảng dưới sử dụng đủ các lens: **Repetitive, Time-consuming, AI-upgrade, Stakeholder Pain**.
+Worksheet yêu cầu tìm ít nhất 5 vấn đề thực tế. Tôi dùng các góc nhìn: công việc lặp lại, công việc tốn thời gian, dịch vụ có thể cải thiện bằng AI và pain point của người dùng/nhân viên.
 
-## 1.1. Bảng quét cơ hội
+## 1. Danh sách 5 vấn đề
 
-| # | Subsidiary / Department | Lens | Problem thực tế sau Reality Check | Evidence / lý do giữ |
-|---:|---|---|---|---|
-| **1** | **VinFast — Customer Service / Aftersales** | Repetitive + Time-consuming | **Triage và routing yêu cầu khách hàng đa kênh:** đọc hiểu yêu cầu, chuẩn hóa thông tin, xác định yêu cầu có thể xử lý ngay hay phải chuyển phòng ban/đại lý. | Quy trình VinFast công khai xác nhận CSKH nhận yêu cầu từ hotline, email, website, app và thư; sau đó có bước **phân loại và chuyển xử lý**. |
-| **2** | **Vinpearl — Reservation / Customer Service** | Repetitive + Time-consuming | **Pre-process yêu cầu booking không cấu trúc:** trích xuất ngày, số khách, loại dịch vụ, thay đổi/hủy, yêu cầu đặc biệt trước khi nhân viên thao tác B2B/OTA/booking system. | JD Vinpearl công khai cho thấy nhân viên tiếp nhận yêu cầu đặt vé/phòng/dịch vụ và thực hiện đặt/xuất/hủy/thay đổi qua B2B/OTA hoặc đối tác. |
-| **3** | **Vinhomes — CRM / Quality Control** | Repetitive | **Phát hiện vi phạm SOP và lỗi dữ liệu CRM:** lead quá hạn, sai thao tác, thiếu cập nhật, bỏ sót bước, lỗi nhập liệu. | JD QC Vinhomes yêu cầu kiểm tra SOP, thao tác CRM, phát hiện lỗi nhập liệu, sử dụng sai chức năng hoặc không cập nhật dữ liệu đúng thời gian. |
-| **4** | **VinBus — Customer Service / Operations** | Time-consuming + Stakeholder Pain | **Chuẩn hóa phản ánh hành khách thành incident ticket có cấu trúc:** sự việc, thời gian, biển số, tuyến, hướng xe, điểm dừng và bằng chứng liên quan. | VinBus công khai yêu cầu khách cung cấp chính các trường thông tin này khi phản ánh để CSKH xác minh. |
-| **5** | **VinBus — Operations / ETA Quality** | AI-upgrade + Stakeholder Pain | **Phát hiện ETA bất thường khi dữ liệu xe mất kết nối:** đánh dấu trường hợp ước tính thời gian đến trạm có độ tin cậy thấp và chuyển sang fallback. | FAQ VinBus thừa nhận một số trường hợp ETA không chính xác khi xe mất kết nối nên hệ thống không nhận được vị trí/vận tốc chính xác. |
+| # | Công ty / Bộ phận | Góc nhìn | Vấn đề được ghi nhận |
+|---:|---|---|---|
+| **1** | **VinFast — Chăm sóc khách hàng / hậu mãi** | Lặp lại + tốn thời gian | Khách hàng gửi yêu cầu qua nhiều kênh. Trung tâm CSKH phải tiếp nhận, phân loại và quyết định yêu cầu nào xử lý ngay, yêu cầu nào chuyển sang phòng ban hoặc đại lý ủy quyền. |
+| **2** | **Vinpearl — Đặt phòng / chăm sóc khách hàng** | Lặp lại + tốn thời gian | Nhân viên tiếp nhận các yêu cầu đặt phòng, đặt vé, thay đổi hoặc hủy dịch vụ; sau đó phải đọc nội dung, xác định đầy đủ thông tin và thao tác trên hệ thống B2B/OTA hoặc làm việc với đối tác. |
+| **3** | **Vinhomes — Kiểm soát chất lượng vận hành CRM** | Lặp lại | Bộ phận QC phải kiểm tra việc tuân thủ quy trình, thao tác CRM, tình trạng cập nhật dữ liệu, lỗi nhập liệu và các bước bị bỏ sót. |
+| **4** | **VinBus — Chăm sóc khách hàng** | Tốn thời gian + pain từ khách hàng | Khi tiếp nhận phản ánh, CSKH cần thu thập nhiều thông tin như thời gian xảy ra sự việc, biển số xe, tuyến, hướng di chuyển, điểm dừng và nội dung phản ánh để xác minh. |
+| **5** | **VinBus — Vận hành thông tin thời gian xe đến trạm** | AI có thể cải thiện + pain từ khách hàng | VinBus thừa nhận có trường hợp thời gian xe đến trạm hiển thị chưa chính xác khi xe mất kết nối và hệ thống không nhận được vị trí, vận tốc chính xác. |
 
----
+### Cơ sở lựa chọn
 
-## 1.2. Đánh giá nhanh 5 problems
+**VinFast:** quy trình chính thức của VinFast nêu rõ ba bước: tiếp nhận yêu cầu → phân loại và chuyển xử lý → phản hồi/xác nhận kết quả. Yêu cầu có thể đến từ hotline, email, website, ứng dụng VinFast hoặc thư.
 
-| Problem | Evidence của workflow | Giá trị tiềm năng | AI có cần thiết? | Rủi ro | Quyết định |
-|---|---:|---:|---:|---:|---|
-| VinFast CS triage & routing | **Cao** | **Cao** | **Cao với text tự do; Rule vẫn cần cho hard constraints** | Trung bình | **Top 3** |
-| Vinpearl booking pre-processing | **Cao** | Cao | **Cao cho extraction từ text; transaction phải deterministic** | Trung bình | **Top 3** |
-| Vinhomes CRM/SOP QC | **Cao** | Cao | Trung bình — phần lớn có thể Rule/SQL | Thấp | **Top 3** |
-| VinBus complaint → incident ticket | Cao | Trung bình | Cao cho text structuring | Thấp | Reserve |
-| VinBus ETA confidence/anomaly | Trung bình | Cao | Có thể ML/rule hơn LLM | Trung bình | Reserve |
+**Vinpearl:** mô tả công việc chính thức của Vinpearl cho thấy nhân viên phải tiếp nhận yêu cầu đặt vé, đặt phòng, dịch vụ; thực hiện đặt, xuất, hủy hoặc thay đổi qua B2B/OTA hoặc đối tác.
 
-### Vì sao chọn Top 3?
+**Vinhomes:** mô tả công việc vị trí QC yêu cầu kiểm tra SOP, thao tác CRM, phát hiện lỗi nhập liệu, sai chức năng, không cập nhật đúng thời gian và bỏ sót bước.
 
-Ba problem được chọn đại diện cho ba kiểu quyết định AI Fit khác nhau:
-
-1. **VinFast:** text đa kênh + semantic routing → có lý do mạnh để dùng **LLM Feature + Rule + HITL**.
-2. **Vinpearl:** extraction từ yêu cầu tự do → **LLM Feature**, nhưng booking transaction phải deterministic.
-3. **Vinhomes:** phần lớn constraint đã có cấu trúc → **Rule-first**, giúp kiểm tra xem nhóm có biết từ chối dùng LLM khi không cần thiết hay không.
+**VinBus:** FAQ chính thức yêu cầu khách cung cấp thông tin khá chi tiết khi phản ánh. FAQ cũng xác nhận ETA có thể sai khi xe mất kết nối.
 
 ---
 
 # Phase 2 — QUICK-ASSESS
 
-## Quick Problem Card #1 — VinFast Service Request Triage & Routing
+Từ 5 vấn đề trên, tôi chọn 3 vấn đề có quy trình rõ nhất để đánh giá sâu hơn:
 
-**Bài toán (1 câu):**  
-Hỗ trợ Trung tâm CSKH VinFast đọc hiểu, chuẩn hóa, ưu tiên và đề xuất tuyến xử lý cho các yêu cầu khách hàng đa kênh, trong khi quyết định chuyển xử lý cuối cùng vẫn thuộc về nhân viên CSKH.
-
-**Công ty thành viên:** VinFast  
-**Actor đang đau:** Nhân viên Trung tâm Chăm sóc Khách hàng; phòng ban phụ trách/đại lý nhận handoff; khách hàng chờ xử lý.
-
-### Current workflow
-
-1. Khách hàng gửi yêu cầu qua hotline/email/web chat/app/thư.
-2. Trung tâm CSKH tiếp nhận và kiểm tra thông tin.
-3. CSKH **phân loại yêu cầu**.
-4. Nếu xử lý ngay được → tư vấn và đóng sự vụ; nếu không → chuyển phòng ban/đại lý ủy quyền.
-5. Đơn vị liên quan xử lý; CSKH/phòng ban/đại lý phản hồi và xác nhận kết quả với khách hàng.
-
-**Bottleneck giả thuyết:** Bước 2–4: hiểu nội dung tự do, nhận diện intent/mức độ ưu tiên, kiểm tra thiếu thông tin và đề xuất destination đúng.
-
-**Thời gian hiện tại:** Chưa có baseline phút/lượt trong nguồn công khai. Đây là biến bắt buộc phải đo trên log/pilot, không tự giả định.
-
-### AI có thể hỗ trợ ở đâu?
-
-AI chỉ hỗ trợ **Understand → Structure → Triage → Recommend Route**:
-
-- tóm tắt yêu cầu;
-- trích xuất intent và thông tin cần thiết;
-- phát hiện multi-intent / missing fields;
-- gợi ý category, severity và destination;
-- sinh JSON có cấu trúc cho CRM.
-
-### Success Metrics — mục tiêu prototype/pilot
-
-- Routing agreement với nhãn human: **≥ 95%**.
-- Recall đối với case safety/critical: **≥ 99%**.
-- Structured JSON hợp lệ: **100%**.
-- Case confidence thấp hoặc xung đột rule được đưa sang HITL: **100%**.
-- Median model inference cho một ticket: **< 10 giây**.
-
-### Quick Architecture
-
-**[x] Hybrid: Rule + LLM Feature + HITL**  
-**[ ] Agent**
-
-**Lý do:** Rule xử lý hard constraints, mandatory fields và safety flags; LLM xử lý semantic text; con người giữ quyền route cuối cùng.
-
-### Stress-test nhanh
-
-- **Điểm yếu 1:** Chưa biết tỷ lệ thao tác hiện tại đã tự động hóa đến đâu.
-- **Điểm yếu 2:** Chưa có baseline ticket volume, triage time và misrouting rate.
-- **Điểm yếu 3:** Sai routing ở case liên quan an toàn/bảo hành có thể gây hậu quả lớn.
-
-**Cách khống chế:** prototype offline trước; dùng labelled dataset; mọi route chỉ là recommendation; confidence thấp bắt buộc human review.
+1. VinFast — phân loại và chuyển yêu cầu khách hàng.
+2. Vinpearl — xử lý yêu cầu đặt phòng/dịch vụ từ nội dung tự do.
+3. Vinhomes — kiểm tra sai sót CRM và tuân thủ quy trình.
 
 ---
 
-## Quick Problem Card #2 — Vinpearl Reservation Request Pre-processing
+# Quick Problem Card 1
+## VinFast — Hỗ trợ phân loại và chuyển yêu cầu khách hàng
 
-**Bài toán (1 câu):**  
-Tự động chuyển yêu cầu đặt/hủy/thay đổi phòng và dịch vụ từ ngôn ngữ tự do thành booking request có cấu trúc để nhân viên Reservation kiểm tra và thao tác trên hệ thống.
+### Bài toán
 
-**Công ty thành viên:** Vinpearl  
-**Actor đang đau:** Nhân viên Reservation / Customer Service.
+Hỗ trợ nhân viên CSKH đọc hiểu yêu cầu của khách, tóm tắt nội dung, xác định loại vấn đề và **đề xuất** bộ phận/đại lý phù hợp để xử lý. Quyết định chuyển yêu cầu cuối cùng vẫn thuộc về nhân viên.
 
-### Current workflow
+### Ai đang gặp khó khăn?
 
-1. Khách gửi yêu cầu đặt phòng/vé/dịch vụ.
-2. Nhân viên đọc và làm rõ nhu cầu.
-3. Nhân viên xác định các field: ngày, số khách, loại dịch vụ, yêu cầu đặc biệt, thay đổi/hủy.
-4. Nhân viên thao tác trên B2B/OTA/booking system hoặc làm việc với đối tác.
-5. Theo dõi đến khi dịch vụ hoàn tất, xử lý thay đổi/khiếu nại nếu phát sinh.
+- Nhân viên Trung tâm Chăm sóc Khách hàng.
+- Phòng ban hoặc đại lý nhận yêu cầu được chuyển đến.
+- Khách hàng nếu yêu cầu bị hiểu sai hoặc phải chuyển qua nhiều nơi.
 
-**Bottleneck giả thuyết:** Bước 2–3 với input không cấu trúc hoặc chứa nhiều yêu cầu trong cùng một message.
+### Quy trình hiện tại
 
-**Thời gian hiện tại:** Không có baseline công khai; cần đo trên sample request thật.
+Theo quy trình chính thức của VinFast:
 
-### AI có thể hỗ trợ ở đâu?
+1. Khách hàng gửi yêu cầu qua hotline, email, website, ứng dụng hoặc thư.
+2. Trung tâm CSKH tiếp nhận thông tin.
+3. CSKH phân loại yêu cầu.
+4. Nếu có thể xử lý ngay, CSKH tư vấn và đóng sự vụ.
+5. Nếu chưa thể xử lý ngay, yêu cầu được chuyển sang phòng ban phụ trách hoặc đại lý ủy quyền.
+6. Sau khi xử lý, VinFast phản hồi và xác nhận kết quả với khách hàng.
 
-LLM chỉ làm **information extraction + normalization**, ví dụ:
+### Bước có khả năng gây khó khăn nhất
 
-```json
-{
-  "check_in": "YYYY-MM-DD",
-  "check_out": "YYYY-MM-DD",
-  "adults": 2,
-  "children": 1,
-  "rooms": 1,
-  "request_type": "new_booking",
-  "special_requests": [],
-  "missing_fields": []
-}
-```
+Bước **phân loại và xác định nơi xử lý phù hợp**.
 
-### Success Metrics — mục tiêu prototype/pilot
+Nguồn công khai không cho biết VinFast hiện đang tự động hóa bước này đến mức nào, cũng không có số liệu về thời gian xử lý một yêu cầu. Vì vậy, đây được xem là **điểm nghẽn cần kiểm chứng**, không phải một kết luận rằng toàn bộ công việc đang làm thủ công.
 
-- Exact match/F1 các mandatory booking fields: **≥ 98%**.
-- JSON schema validity: **100%**.
-- Yêu cầu thiếu field được flag: **≥ 99% recall**.
-- Processing latency: **< 10 giây/request**.
-- Autonomous booking/price confirmation: **0 trường hợp**.
+### AI có thể hỗ trợ gì?
 
-### Quick Architecture
+AI có thể:
 
-**[x] LLM Feature + Rule validation + HITL**  
-**[ ] Agent**
+- tóm tắt nội dung khách hàng gửi;
+- nhận diện một hoặc nhiều ý định trong cùng yêu cầu;
+- trích xuất thông tin quan trọng;
+- chỉ ra thông tin còn thiếu;
+- đề xuất nhóm vấn đề và nơi tiếp nhận phù hợp;
+- cảnh báo các trường hợp nhạy cảm hoặc cần ưu tiên.
 
-### Stress-test nhanh
+AI **không tự chuyển yêu cầu** mà chỉ tạo gợi ý để nhân viên duyệt.
 
-- Inventory, giá và chính sách hủy là dữ liệu động → LLM không được tự đoán.
-- Extraction sai ngày/số khách có thể tạo booking sai.
-- Do đó AI chỉ tạo structured draft; nhân viên và booking system giữ quyền transaction.
+### Chỉ số đánh giá đề xuất cho thử nghiệm
+
+Đây là **mục tiêu thử nghiệm**, không phải số liệu hiện tại của VinFast:
+
+- Đề xuất đúng nơi xử lý so với nhãn của nhân viên: **từ 95% trở lên**.
+- Phát hiện các trường hợp nghiêm trọng/an toàn cần chuyển người kiểm tra: **từ 99% trở lên**.
+- Kết quả trả về đúng cấu trúc dữ liệu yêu cầu: **100%**.
+- Trường hợp AI không chắc chắn phải chuyển sang người kiểm tra: **100%**.
+- Thời gian AI xử lý một yêu cầu: **dưới 10 giây**.
+
+### Kiến trúc phù hợp
+
+**LLM Feature kết hợp Rule và Human-in-the-loop.**
+
+Rule dùng cho các điều kiện cứng; mô hình ngôn ngữ dùng để hiểu nội dung tự do; nhân viên là người quyết định cuối cùng.
+
+Không cần Agent tự hành.
 
 ---
 
-## Quick Problem Card #3 — Vinhomes CRM/SOP Quality Assurance
+# Quick Problem Card 2
+## Vinpearl — Chuẩn hóa yêu cầu đặt phòng và dịch vụ
 
-**Bài toán (1 câu):**  
-Tự động phát hiện record CRM vi phạm SOP hoặc có lỗi dữ liệu để QC tập trung review các trường hợp bất thường thay vì kiểm tra đồng đều mọi record.
+### Bài toán
 
-**Công ty thành viên:** Vinhomes  
-**Actor đang đau:** Chuyên viên Quản lý Chất lượng (QC), Sales Ops/Marketing Ops.
+Hỗ trợ nhân viên đọc các yêu cầu đặt phòng, đặt vé, thay đổi hoặc hủy dịch vụ và chuyển nội dung tự do thành thông tin có cấu trúc trước khi thao tác trên hệ thống.
 
-### Current workflow
+### Ai đang gặp khó khăn?
 
-1. QC kiểm tra việc thực hiện SOP và các điểm chạm Sale–Marketing.
-2. Kiểm tra thao tác CRM/listing/dashboard theo checklist.
-3. Phát hiện lỗi nhập liệu, dùng sai chức năng, không cập nhật đúng hạn hoặc bỏ sót bước.
+Nhân viên đặt phòng và chăm sóc khách hàng, đặc biệt khi một yêu cầu chứa nhiều thông tin như ngày đi, số lượng người, số phòng, trẻ em, yêu cầu đặc biệt hoặc thay đổi lịch trình.
+
+### Quy trình hiện tại
+
+Từ mô tả công việc chính thức của Vinpearl:
+
+1. Tiếp nhận yêu cầu đặt vé, đặt phòng hoặc dịch vụ.
+2. Tư vấn và làm rõ nhu cầu khách hàng.
+3. Xác định các thông tin cần thiết.
+4. Thực hiện đặt, xuất, hủy hoặc thay đổi qua B2B/OTA hoặc đối tác.
+5. Theo dõi dịch vụ và xử lý các vấn đề phát sinh.
+
+### Bước có khả năng gây khó khăn nhất
+
+Bước đọc yêu cầu tự do và chuyển thành đầy đủ các trường thông tin cần thiết trước khi đặt dịch vụ.
+
+Nguồn công khai không cho biết bước này hiện mất bao lâu, vì vậy thời gian xử lý cần được đo nếu triển khai thử nghiệm.
+
+### AI có thể hỗ trợ gì?
+
+AI chỉ thực hiện phần **đọc và trích xuất thông tin**, ví dụ:
+
+- ngày nhận/trả phòng;
+- số khách;
+- số phòng;
+- loại yêu cầu;
+- yêu cầu đặc biệt;
+- thông tin còn thiếu cần hỏi lại.
+
+AI không được tự xác nhận phòng trống, giá hoặc đặt phòng.
+
+### Chỉ số đánh giá đề xuất
+
+- Độ chính xác khi trích xuất các trường bắt buộc: **từ 98% trở lên**.
+- Kết quả đúng cấu trúc: **100%**.
+- Phát hiện yêu cầu còn thiếu thông tin: **từ 99% trở lên**.
+- Không có trường hợp AI tự xác nhận đặt phòng hoặc tự báo giá: **0 trường hợp**.
+
+### Kiến trúc phù hợp
+
+**LLM Feature + Rule kiểm tra dữ liệu + nhân viên duyệt.**
+
+---
+
+# Quick Problem Card 3
+## Vinhomes — Kiểm tra sai sót CRM và tuân thủ quy trình
+
+### Bài toán
+
+Hỗ trợ bộ phận QC phát hiện các bản ghi CRM có dấu hiệu sai quy trình hoặc thiếu dữ liệu để nhân viên tập trung kiểm tra những trường hợp bất thường.
+
+### Ai đang gặp khó khăn?
+
+Chuyên viên QC, bộ phận Sales Operations và Marketing Operations.
+
+### Quy trình hiện tại
+
+Theo tin tuyển dụng chính thức của Vinhomes:
+
+1. Kiểm tra việc tuân thủ SOP trong vận hành nền tảng và phân phối lead.
+2. Kiểm tra thao tác trên CRM, listing và dashboard.
+3. Phát hiện lỗi nhập liệu, sử dụng sai chức năng, không cập nhật đúng hạn hoặc bỏ sót bước.
 4. Phân loại lỗi theo mức độ.
-5. Tổng hợp và báo cáo trưởng nhóm.
+5. Tổng hợp và báo cáo.
 
-**Bottleneck giả thuyết:** khối lượng kiểm tra lặp lại và việc tổng hợp exception.
+### Bước có khả năng gây khó khăn nhất
 
-**Thời gian hiện tại:** Chưa có số công khai.
+Việc kiểm tra lặp lại một lượng lớn bản ghi và tìm các trường hợp bất thường.
 
-### AI có thể hỗ trợ ở đâu?
+### AI có thể hỗ trợ gì?
 
-Phần lớn problem **không cần LLM**:
+Sau khi phân tích, tôi cho rằng **phần lớn bài toán này không cần mô hình ngôn ngữ**.
 
-- quá hạn → SQL/Rule;
-- field bắt buộc trống → Rule;
-- trạng thái sai sequence → State machine;
-- phân phối sai region → Rule.
+Ví dụ:
 
-LLM chỉ đáng dùng cho phần unstructured như audit note/listing description nếu có.
+- trường bắt buộc bị bỏ trống → Rule;
+- cập nhật trễ → Rule;
+- trạng thái đi sai thứ tự → State Machine;
+- phân phối sai khu vực → Rule.
 
-### Success Metrics — mục tiêu prototype/pilot
+Mô hình ngôn ngữ chỉ có ích nếu cần kiểm tra các phần văn bản tự do như ghi chú, mô tả hoặc nội dung listing.
 
-- Recall đối với seeded SOP violations: **≥ 95%**.
-- False-positive rate: **≤ 5%**.
-- Hard-rule checks có kết quả deterministic/reproducible: **100%**.
-- Không tự sanction/khóa record: **0 trường hợp**.
+### Chỉ số đánh giá đề xuất
 
-### Quick Architecture
+- Phát hiện được ít nhất **95%** lỗi đã cài sẵn trong bộ dữ liệu thử nghiệm.
+- Tỷ lệ cảnh báo sai không vượt quá **5%**.
+- Các điều kiện cứng phải cho kết quả lặp lại giống nhau: **100%**.
+- Hệ thống không tự khóa hay xử phạt bản ghi: **0 trường hợp**.
 
-**[x] Rule / State Machine first**  
-**[ ] LLM là core solution**  
-**[ ] Agent**
+### Kiến trúc phù hợp
 
-### Stress-test nhanh
+**Rule / State Machine là chính.**
 
-Đây là candidate tốt về business nhưng AI Fit thấp hơn hai problem trên. Nếu workflow chủ yếu là structured data + fixed SOP, Rule/SQL rẻ hơn, dễ audit hơn và ít hallucination hơn.
+Đây là ví dụ cho thấy không phải vấn đề nào cũng nên dùng LLM.
 
 ---
 
-# 2. Quyết định sau QUICK-ASSESS
+# Quyết định sau Phase 2
 
-## Chọn bài toán cuối cùng
+## Bài toán được chọn: VinFast — hỗ trợ phân loại và chuyển yêu cầu khách hàng
 
-**VinFast Service Intelligence — AI-assisted Customer Request Triage & Routing**
+Tôi chọn bài toán VinFast vì bốn lý do.
 
-### Vì sao chọn?
+Thứ nhất, **quy trình có bằng chứng trực tiếp từ VinFast**. Công ty công khai rõ bước tiếp nhận, phân loại và chuyển yêu cầu cho phòng ban/đại lý.
 
-| Tiêu chí | VinFast Triage | Vinpearl Reservation | Vinhomes QC |
-|---|---:|---:|---:|
-| Workflow có evidence trực tiếp | 5/5 | 5/5 | 5/5 |
-| Semantic complexity phù hợp LLM | **5/5** | 4/5 | 2/5 |
-| Có chỗ rõ ràng cho Rule vs LLM | **5/5** | 4/5 | 5/5 |
-| HITL / Boundary thiết kế rõ | **5/5** | 5/5 | 5/5 |
-| Dễ tạo prompt prototype | **5/5** | 5/5 | 3/5 |
-| Business scale | **5/5** | 4/5 | 4/5 |
-| Tổng | **30/30** | **27/30** | **24/30** |
+Thứ hai, phần khó của bài toán nằm ở **hiểu nội dung ngôn ngữ tự nhiên**, đây là nơi mô hình ngôn ngữ có lợi thế rõ hơn so với chỉ dùng luật cố định.
 
-### Scope cuối cùng
+Thứ ba, bài toán có thể giới hạn rủi ro tốt. AI chỉ đưa ra gợi ý, còn nhân viên CSKH giữ quyền quyết định.
 
-**IN SCOPE**
+Thứ tư, đây là bài toán đủ thực tế nhưng không cần xây một Agent tự hành phức tạp. Vì vậy nhóm có thể tập trung đúng vào mục tiêu của lab: xác định bài toán, chọn đúng mức AI và thiết kế ranh giới vận hành.
 
-- Understand customer free-text.
-- Extract structured fields.
-- Summarize.
-- Classify intent/category.
-- Flag safety/critical or missing information.
-- Recommend responsible team/dealer.
-- Return confidence + rationale for human review.
+## Phạm vi bài toán
 
-**OUT OF SCOPE**
+### AI được phép hỗ trợ
 
-- Không tự trả lời khiếu nại cuối cùng.
-- Không chẩn đoán lỗi kỹ thuật xe.
-- Không quyết định bảo hành/bồi thường.
-- Không tự gửi case/đóng case nếu chưa có human approval.
-- Không tự thực hiện hành động trong CRM/dealer system.
-- Không thay thế escalation policy hiện hành.
+- đọc và tóm tắt yêu cầu;
+- nhận diện loại vấn đề;
+- phát hiện thông tin thiếu;
+- gợi ý mức độ ưu tiên;
+- đề xuất nơi tiếp nhận;
+- đánh dấu trường hợp cần người kiểm tra.
+
+### AI không được phép
+
+- tự chẩn đoán lỗi kỹ thuật của xe;
+- quyết định bảo hành hoặc bồi thường;
+- tự trả lời khiếu nại cuối cùng;
+- tự đóng sự vụ;
+- tự chuyển sự vụ mà không có người duyệt;
+- tự thay đổi dữ liệu trên hệ thống CRM.
 
 ---
 
-# 3. Nguồn kiểm chứng
+# Nguồn tham khảo
 
-1. **VinFast — Quy trình tiếp nhận, phản hồi và giải quyết yêu cầu/khiếu nại khách hàng**  
+1. **VinFast — Quy trình tiếp nhận, phản hồi và giải quyết phản ánh/yêu cầu/khiếu nại của khách hàng**  
    https://vinfastauto.com/vn_vi/quy-trinh-tiep-nhan-phan-hoi-thong-tin-va-giai-quyet-phan-anh-yeu-cau-khieu-nai-cua-khach-hang
 
-2. **VinFast — 175.099 xe điện bàn giao tại Việt Nam năm 2025; 400 xưởng dịch vụ**  
-   https://vinfastauto.com/vn_vi/vinfast-lap-ky-luc-ban-giao-xe-o-to-dien-tai-viet-nam-2025
-
-3. **Vinpearl Careers — Chuyên viên Kinh doanh & CSKH (vé máy bay & khách sạn quốc tế)**  
+2. **Vinpearl Careers — Chuyên viên Kinh doanh & Chăm sóc Khách hàng**  
    https://careers.vinpearl.com/job/vinpearl-head-office-chuyen-vien-kinh-doanh-cham-soc-khach-hang-ve-may-bay-khach-san-quoc-te-10386
 
-4. **Vinhomes Careers — Chuyên viên Quản lý Chất lượng (QC)**  
+3. **Vinhomes Careers — Chuyên viên Quản lý Chất lượng (QC)**  
    https://careers.vinhomes.vn/job/chuyen-vien-quan-ly-chat-luong-qc-10681
 
-5. **VinBus — Liên hệ / thông tin cần cung cấp khi phản ánh**  
+4. **VinBus — FAQ và thông tin liên hệ**  
    https://vinbus.vn/lien-he
 
-6. **Vinhomes Annual Report 2024 — VPMS**  
-   https://vinhomes.vn/vi/bao-cao-thuong-nien
-
-7. **Vinmec — DrAid tiết kiệm 80% thời gian xử lý hồ sơ y tế**  
+5. **Vinmec — DrAid tiết kiệm thời gian xử lý hồ sơ y tế**  
    https://www.vinmec.com/vie/bai-viet/dot-pha-cong-nghe-ai-tai-vinmec-tiet-kiem-80-thoi-gian-xu-ly-ho-so-y-te
 
-8. **Vinhomes — Trợ lý ảo trên Vinhomes Resident / Vinhomes Online**  
+6. **Vinhomes — Trợ lý ảo trên Vinhomes Resident và Vinhomes Online**  
    https://market.vinhomes.vn/blog/ra-mat-tro-ly-ao-tren-ung-dung-vinhomes-resident-va-vinhomes-online
+
+7. **Vinhomes Annual Report 2024 — V-PMS**  
+   https://vinhomes.vn/vi/bao-cao-thuong-nien
